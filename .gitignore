@@ -1,2 +1,8 @@
 /venv
 config.py
+/node_modules
+package-lock.json
+app.db
+__pycache__
+tailwind-build.css
+tailwind.css

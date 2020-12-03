@@ -1,0 +1,28 @@
+{
+  "name": "todop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "postcss.config.js",
+  "dependencies": {
+    "autoprefixer": "^10.0.4",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.1.13",
+    "postcss-import": "^13.0.0",
+    "tailwindcss": "^2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev postcss app/static/tailwind-build.css -o app/static/tailwind.css",
+    "prod": "cross-env NODE_ENV=production postcss app/static/tailwind-build.css -o app/static/tailwind.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LisaCollignon/TodoP.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LisaCollignon/TodoP/issues"
+  },
+  "homepage": "https://github.com/LisaCollignon/TodoP#readme"
+}
