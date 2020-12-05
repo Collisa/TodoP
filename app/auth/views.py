@@ -1,21 +1,13 @@
+from sqlalchemy.exc import IntegrityError
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
-from wtforms.validators import Email
+from flask_login import login_user, login_required, logout_user
 
 from app import db
 from app.auth.forms import RegisterForm, LoginForm
 from app.auth.models import User
-from app.auth.decorators import login_required
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
-
-
-
-
-@bp.route('me/')
-@login_required
-def home():
-  return render_template('auth/profile.html', user=g.user)
 
 
 
@@ -42,11 +34,11 @@ def login():
     if user and check_password_hash(user.password, form.password.data):
       # the session can't be modified as it's signed, 
       # it's a safe place to store the user id
-      session['user_id'] = user.id
+      login_user(user)
       flash(f'Welcome {user.name}')
-      return redirect(url_for('auth.home'))
+      return redirect(url_for('todo.index'))
     
-    flash('Wrong email or password', 'error-message')
+    flash('Wrong email or password.')
   return render_template('auth/login.html', form=form)
 
 
@@ -56,20 +48,37 @@ def login():
 def register():
   form = RegisterForm(request.form)
 
+  
+
   if form.validate_on_submit():
     # create a user instance not yet stored in the database
     user = User(name=form.name.data,
                 email=form.email.data,
                 password=generate_password_hash(form.password.data)
     )
-    db.session.add(user)
-    db.session.commit()
 
-    # Log the user in, as he now has an id
-    session['user_id'] = user.id
+    try:
+      db.session.add(user)
+      db.session.commit()
+    except IntegrityError:
+      flash('Check if your input is correct, else the username or email might already be in use.')
+      return redirect(url_for('auth.register'))
+      
+    
+
+    # Log the user in
+    login_user(user)
 
     # flash will display a message to the user
     flash('Thanks for registering')
     # redirect user to the 'home' method of the user module
-    return redirect(url_for('auth.home'))
+    return redirect(url_for('todo.index'))
   return render_template('auth/register.html', form=form)
+
+
+
+
+@bp.route('/logout')
+@login_required
+def logout():
+  logout_user()

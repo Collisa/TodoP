@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   purge: [
     'app/templates/**/*.html',
@@ -6,7 +8,11 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        fuchsia: colors.fuchsia,
+      },
+    },
   },
   variants: {
     extend: {},
