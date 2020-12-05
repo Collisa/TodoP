@@ -24,9 +24,7 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead>
               <tr>
-                <!-- <th scope="col" class="px-6 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Todo
-                </th> -->
+                
                 <th scope="col" class="px-6 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Todo
                 </th>
@@ -36,38 +34,31 @@
                 <th scope="col" class="px-6 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
                   Tags
                 </th>
-                <th scope="col" class="px-6 py-2 bg-gray-50 w-20">
-                  <span class="sr-only">Edit</span>
-                </th>
+              
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               {% for todo in context.todos %}
               <tr>
-                {% if edit == True and todo.id == edit_todo['id'] %}
-                <!-- <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                  Jane Cooper
-                </td> -->
+                {% if context.edit == True and todo.id == edit_todo.id %}
                 
-                  <td class="px-6 whitespace-nowrap text-sm text-gray-400 flex flex-row items-center">
+                  <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-400 flex flex-row items-center">
                     <svg class="text-fuchsia-300 hover:text-fuchsia-600 h-5 w-auto mx-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div class="w-full">
-                      <form class="w-full" action="{{ url_for('todo.update', id=todo['id']) }}" method="POST">
-                        <!-- <label for="email" class="block text-sm font-medium text-gray-700">Email</label> -->
-                        <div class="">
-                          <input type="text" name="body" id="body" value="{{ todo.body }}" class="focus:ring-fuchsia-500 focus:border-fuchsia-500 block w-full sm:text-sm border-transparent rounded-md placeholder-fuchsia-300" placeholder="{{ todo.body}}">
-                        </div>
+                      <form class="w-full mb-0" action="{{ url_for('todo.update', id=todo.id) }}" method="POST">
+                        {{ edit_form.csrf_token }}
+                        {{ edit_form.body(class="focus:ring-fuchsia-500 focus:border-fuchsia-500 block w-full sm:text-sm border-transparent rounded-md placeholder-fuchsia-300", autofocus=True, onfocus="var temp_value=this.value; this.value=''; this.value=temp_value" ) }}
                       </form>
                     </div>
                   </td>
                 {% else %}
-                  <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500 flex flex-row">
+                  <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500 flex flex-row" ondblclick="window.location='{{ url_for('todo.update', id=todo.id) }}'">
                     <svg class="text-fuchsia-300 hover:text-fuchsia-600 h-5 w-auto mx-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <p>{{ todo['body'] }}</p>
+                    <p>{{ todo.body }}</p>
                   </td>
                 {% endif %}
                   <td class="px-6 py-2 whitespace-nowrap">
@@ -80,26 +71,20 @@
                       Test
                     </span>
                   </td>
-                  <td class="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="{{ url_for('todo.update', id=todo['id']) }}" class="text-fuchsia-300 hover:text-fuchsia-500">Edit</a>
-                  </td>
+                  
                 </tr>
                 
               {% endfor %}
               <tr>
-                <!-- <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                  Jane Cooper
-                </td> -->
-                <td class="px-6 whitespace-nowrap text-sm text-gray-500 flex flex-row items-center">
+                
+                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500 flex flex-row items-center">
                   <svg class="text-fuchsia-300 hover:text-fuchsia-600 h-5 w-auto mx-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div class="w-full">
-                    <form class="w-full" action="{{ url_for('todo.create') }}" method="POST">
-                      <!-- <label for="email" class="block text-sm font-medium text-gray-700">Email</label> -->
-                      <div class="">
-                        <input type="text" name="body" id="body" value="{{ request.form['body'] }}" class="focus:ring-fuchsia-500 focus:border-fuchsia-500 block w-full sm:text-sm border-transparent rounded-md placeholder-fuchsia-300" placeholder="...">
-                      </div>
+                    <form class="w-full mb-0" action="{{ url_for('todo.create') }}" method="POST">
+                      {{ form.csrf_token }}
+                      {{ form.body(class="focus:ring-fuchsia-500 focus:border-fuchsia-500 block w-full sm:text-sm border-transparent rounded-md placeholder-fuchsia-300 leading-10", placeholder="...") }}
                     </form>
                   </div>
                 </td>
@@ -113,9 +98,7 @@
                     
                   </span>
                 </td>
-                <td class="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
-                  <a href="#" class="text-fuchsia-300 hover:text-fuchsia-500"></a>
-                </td>
+                
               </tr>
 
               <!-- More rows... -->
