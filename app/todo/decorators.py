@@ -1,13 +1,9 @@
-from flask_login import current_user
+from app import todo
+
 from .models import Todo
+from app import db
 
-def get_todo(id, check_creator=True):
+def get_todo(id):
     todo = Todo.query.filter_by(id=id).first()
-
-    if todo is None:
-        abort(404, f"Todo id {id} doesn't exist.")
-
-    if check_creator and todo.user_id != current_user.id:
-        abort(403)
-
     return todo
+    

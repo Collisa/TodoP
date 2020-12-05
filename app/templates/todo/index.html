@@ -39,13 +39,18 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               {% for todo in context.todos %}
-              <tr>
-                {% if context.edit == True and todo.id == edit_todo.id %}
+              <tr class="hover:bg-fuchsia-50 hover:cursor-pointer">
+                {% if context.edit == True and todo.id == edit_todo.id and not todo.done %}
                 
                   <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-400 flex flex-row items-center">
-                    <svg class="text-fuchsia-300 hover:text-fuchsia-600 h-5 w-auto mx-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                
+                    <svg class="w-auto mx-1.5 h-5
+                      {{ 'text-white bg-fuchsia-700 rounded-full'
+                      if todo.done else
+                      'text-fuchsia-300 hover:text-fuchsia-600 h-5' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
+                  
                     <div class="w-full">
                       <form class="w-full mb-0" action="{{ url_for('todo.update', id=todo.id) }}" method="POST">
                         {{ edit_form.csrf_token }}
@@ -55,9 +60,14 @@
                   </td>
                 {% else %}
                   <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500 flex flex-row" ondblclick="window.location='{{ url_for('todo.update', id=todo.id) }}'">
-                    <svg class="text-fuchsia-300 hover:text-fuchsia-600 h-5 w-auto mx-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <a href="{{ url_for('todo.check_off', id=todo.id) }}">
+                      <svg class="w-auto mx-1.5 h-5
+                        {{ 'text-white bg-fuchsia-700 rounded-full'
+                        if todo.done else
+                        'text-fuchsia-300 hover:text-fuchsia-600 h-5' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </a>
                     <p>{{ todo.body }}</p>
                   </td>
                 {% endif %}
@@ -75,7 +85,7 @@
                 </tr>
                 
               {% endfor %}
-              <tr>
+              <tr class="hover:bg-fuchsia-50 hover:cursor-pointer">
                 
                 <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-500 flex flex-row items-center">
                   <svg class="text-fuchsia-300 hover:text-fuchsia-600 h-5 w-auto mx-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

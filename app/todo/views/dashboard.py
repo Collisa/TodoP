@@ -19,7 +19,7 @@ def index():
 
   context = {
     'dashboard': dashboard,
-    'todos': todos
+    'todos': todos,
   }
 
   return render_template('todo/index.html', context=context, form=TodoForm())
@@ -76,5 +76,16 @@ def update(id):
     return redirect(url_for('todo.index'))
   return render_template('todo/index.html', edit_todo=edit_todo, context=context, edit_form=TodoForm(obj=edit_todo), form=TodoForm())
 
+
+
+@bp.route('/check_off/<int:id>')
+@login_required
+def check_off(id):
+
+  todo = get_todo(id)
+    
+  todo.done = True
+  db.session.commit()
+  return redirect(url_for('todo.index'))
 
 
