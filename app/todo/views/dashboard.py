@@ -24,6 +24,36 @@ def index():
 
   return render_template('todo/index.html', context=context, form=TodoForm())
 
+@bp.route('/done')
+@login_required
+def show_finished():
+
+  todos = Todo.query.filter_by(done=True).all()
+
+  dashboard = True
+
+  context = {
+    'dashboard': dashboard,
+    'todos': todos,
+  }
+
+  return render_template('todo/index.html', context=context, form=TodoForm())
+
+@bp.route('/todo')
+@login_required
+def show_undone():
+
+  todos = Todo.query.filter_by(done=False).all()
+
+  dashboard = True
+
+  context = {
+    'dashboard': dashboard,
+    'todos': todos,
+  }
+
+  return render_template('todo/index.html', context=context, form=TodoForm())
+
 
 
 
